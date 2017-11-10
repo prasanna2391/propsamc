@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="myController">
+
+<head>
+    <title>
+        Geo code
+    </title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+</head>
+<style>
+.center-div {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.custom-file-input {
+    color: transparent;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.custom-file-input::before {
+    content: 'Choose file';
+    color: black;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+
+.custom-file-input:hover::before {
+    border-color: transparent;
+    outline: 0;
+}
+
+.custom-file-input:active {
+    outline: 0;
+}
+
+.custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.custom-file-input::before {
+    content: 'Choose file';
+    color: #fff;
+    display: inline-block;
+    background: #f18641;
+    text-shadow: 0px 0px 0px !important;
+    border: 1px solid #f18641;
+    margin-right: 0px;
+    border-radius: 3px;
+    padding: 6px 5px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+
+.custom-file-input,
+.custom-file-input:hover {
+    color: #555 !important;
+    border: 0px;
+    outline: 0px;
+}
+
+#loader {
+    position: relative;
+    left: 102px;
+    background-image: url(images/ProgressImage.gif);
+    background-size: 100%;
+    width: 232px;
+    height: 272px;
+    background-repeat: no-repeat;
+}
+</style>
+<header>
+    <h2 style="text-align:center">Geo code</h2>
+</header>
+<hr>
+
+<body>
+    <div class="container center-div">
+        <form class="form-inline emiform">
+            <h3 style="text-align:center;">Please upload an excel file</h3>
+            <div class="row">
+                <div class="col-md-offset-4 col-sm-12">
+                    <div class="form-group">
+                        <input type="file" class="custom-file-input form-control" file-model="excelfile" name="aadhaarcard" ng-required="true" ng-model="excelfile">
+                        <button type="submit" class="btn btn-primary" ng-click="uploadfile(excelfile)">Upload</button>
+                    </div>
+                    <br>
+                    <div id="loader" ng-if="loader">
+                    </div>
+                    <div class="alert alert-info col-md-5" style="margin-top:10px;" ng-if="errormessage">
+                        <strong style="text-align:center;">{{errormessage}}</strong>
+                    </div>
+                </div>
+        </form>
+        </div>
+        <script type="text/javascript">
+        var app = angular.module("myApp", []);
+
+        app.controller("myController", function($scope, service) {
+            $scope.loader = false;
+            $scope.uploadfile = function(file) {
+                if (file) {
+                    $scope.loader = true;
+                    $scope.errormessage = '';
+                    if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                        uploadUrl = 'http://localhost:8000/api/excel/'
+                        service.uploadFileToUrl(file, uploadUrl).then(function(data) {
+                            $scope.loader = false;
+                            location.href = data;
+                            $scope.fileHref = data;
+                            $scope.errormessage = "Downloaded successfully";
+                        }, function(err) {
+                            $scope.loader = false;
+                            $scope.errormessage = err.message;
+                        });
+                    } else {
+                        $scope.errormessage = "Please upload excel file only";
+                        $scope.loader = false;
+
+                    }
+                } else {
+                    $scope.errormessage = "Please upload a file";
+                }
+            }
+        });
+        app.service("service", function($q, $http) {
+
+            this.uploadFileToUrl = function(file, uploadUrl) {
+                var deferred = $q.defer();
+                var fd = new FormData();
+                fd.append('file', file);
+
+
+                $http.post(uploadUrl, fd, {
+                        transformRequest: angular.identity,
+                        headers: {
+                            'Content-Type': undefined
+                        }
+                    })
+                    .success(angular.bind(this, function(data, status, headers, config) {
+                        deferred.resolve(data, status);
+                    }))
+                    .error(angular.bind(this, function(data, status, headers, config) {
+                        if (data) {
+                            data.status = status;
+                        }
+                        if (status === 0) {
+                            if (data === "") {
+                                data = {};
+                                data['status'] = 0;
+                                data['non_field_errors'] = ["Could not connect. Please try again."];
+                            }
+                            if (data == null) {
+                                data = {};
+                                data['status'] = 0;
+                                data['non_field_errors'] = ["Server timed out. Please try again."];
+                            }
+                        }
+                        deferred.reject(data, status, headers, config);
+                    }));
+                return deferred.promise;
+            }
+
+        });
+        app.directive('fileModel', function($parse) {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    console.log(model)
+                    var modelSetter = model.assign;
+
+                    element.bind('change', function() {
+                        scope.$apply(function() {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+
+                        console.log(scope);
+                    });
+                }
+            };
+        });
+        </script>
+</body>
+
+</html>

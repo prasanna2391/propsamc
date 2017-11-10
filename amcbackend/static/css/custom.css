@@ -1,0 +1,112 @@
+.navbar-inverse {
+    background-color: #41a3cc;
+    border-color: #41a3cc;
+}
+
+
+.thumbnail {
+    display: block;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 70px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.panel {
+    padding: 40px;
+    margin-top: 90px;
+}
+.panel-info > .panel-heading {
+    color: #f0f3f5;
+    background-color: #f09e4e;
+    border-color: #f1f0bc;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: #0f0f0f;
+}
+.navbar-inverse .navbar-brand {
+    color: #0f0f0f;
+}
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: #fff;
+    background-color: #f09e4e;
+    margin-top: 100px;
+    margin-right: 25px;
+}
+h1 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-top: 20px;
+    margin-top: 60px;
+}
+.alert h4 {
+    margin-top: 0;
+    color: inherit;
+    margin-left: 70px;
+}
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 200px;
+    margin-top: 25px;
+}
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: 54px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #84ab38;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #41a3cc;
+    min-height: 150px;
+}
+#f5680f
+.google
+{
+   background:blue;
+   background:url("http://127.0.0.1:8000/static/images/th1.jpeg");
+   background-color:black;
+   	background-size: 30px 30px;
+    background-repeat: no-repeat;
+    padding:10px 5px 3px 72px;
+}
+.facebook
+{
+   background:blue;
+   background:url("http://127.0.0.1:8000/static/images/th.jpeg");
+   background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-color:grey;
+    padding:10px 5px 3px 56px;
+}
+.linkedin
+{
+   background:black;
+   background:url("http://127.0.0.1:8000/static/images/th4.jpeg");
+   background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-color:red;
+    padding:10px 5px 3px 66px;
+}
