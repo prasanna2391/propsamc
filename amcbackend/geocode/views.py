@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import csv
-import os
-
-import status as status
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, authentication_classes, permission_classes, parser_classes
@@ -19,11 +15,7 @@ from rest_framework import status
 @authentication_classes([AllowAny])
 @permission_classes([AllowAny])
 def excel(request):
-    try:
-        file_obj = request.FILES['file']
-    except:
-        message = "Please upload a file"
-        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+    file_obj = request.FILES['file']
     wb = openpyxl.load_workbook(file_obj)
     sheet = wb.get_sheet_names()[0]
     datasheet = wb.get_sheet_by_name(sheet)
@@ -40,4 +32,4 @@ def excel(request):
            continue
     wb.save('../media_cdn/' + file_obj.name)
     filepath = '../media_cdn/' + file_obj.name
-    return Response(filepath,status=status.HTTP_200_OK)
+    return Response(filepath)

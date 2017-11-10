@@ -131,7 +131,7 @@
                     $scope.loader = true;
                     $scope.errormessage = '';
                     if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                        uploadUrl = 'http://localhost:8000/api/excel/'
+                        uploadUrl = 'http://127.0.0.1:8000/api/excel/'
                         service.uploadFileToUrl(file, uploadUrl).then(function(data) {
                             $scope.loader = false;
                             location.href = data;
