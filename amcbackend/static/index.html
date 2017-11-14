@@ -68,7 +68,7 @@
     background: #f18641;
     text-shadow: 0px 0px 0px !important;
     border: 1px solid #f18641;
-    margin-right: 0px;
+    margin: auto;
     border-radius: 3px;
     padding: 6px 5px;
     outline: none;
@@ -124,14 +124,16 @@
         <script type="text/javascript">
         var app = angular.module("myApp", []);
 
-        app.controller("myController", function($scope, service) {
+        app.controller("myController", function($scope, service,$location) {
             $scope.loader = false;
             $scope.uploadfile = function(file) {
                 if (file) {
                     $scope.loader = true;
                     $scope.errormessage = '';
                     if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                        uploadUrl = 'http://127.0.0.1:8000/api/excel/'
+                        var url = $location.$$absUrl.split('static')[0]
+
+                        uploadUrl = url + 'api/excel/'
                         service.uploadFileToUrl(file, uploadUrl).then(function(data) {
                             $scope.loader = false;
                             location.href = data;
